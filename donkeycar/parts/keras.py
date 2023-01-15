@@ -182,6 +182,7 @@ class KerasPilot(ABC):
             workers=1,
             use_multiprocessing=False)
             
+        # grafik acc, loss
         if show_plot:
             try:
                 import matplotlib.pyplot as plt
@@ -202,16 +203,17 @@ class KerasPilot(ABC):
                 plt.legend(['train', 'validate'], loc='upper right')
 
                 # summarize history for acc
-                if 'angle_out_acc' in history.history:
-                    plt.subplot(122)
-                    plt.plot(history.history['angle_out_acc'])
-                    plt.plot(history.history['val_angle_out_acc'])
-                    plt.title('model angle accuracy')
-                    plt.ylabel('acc')
-                    plt.xlabel('epoch')
+                # if 'angle_out_acc' in history.history:
+                plt.subplot(122)
+                plt.plot(history.history['angle_out_acc'])
+                plt.plot(history.history['val_angle_out_acc'])
+                plt.title('model angle accuracy')
+                plt.ylabel('acc')
+                plt.xlabel('epoch')
 
                 plt.savefig(Path(model_path).with_suffix('.png'))
                 # plt.show()
+            
 
             except Exception as ex:
                 print(f"problems with loss graph: {ex}")
@@ -809,29 +811,55 @@ def core_cnn_layers(img_in, drop, l4_stride=1):
     :param l4_stride:       4-th layer stride, default 1
     :return:                stack of CNN layers
     """
-    x = img_in
-    x = conv2d(24, 5, 2, 1)(x)
-    x = Dropout(drop)(x)
-    x = conv2d(32, 5, 2, 2)(x)
-    x = Dropout(drop)(x)
-    x = conv2d(64, 5, 2, 3)(x)
-    x = Dropout(drop)(x)
-    x = conv2d(64, 3, l4_stride, 4)(x)
-    x = Dropout(drop)(x)
-    x = conv2d(64, 3, 1, 5)(x)
-    x = Dropout(drop)(x)
-    x = Flatten(name='flattened')(x)
-    return x
+    ## default:
+    # x = img_in
+    # x = conv2d(24, 5, 2, 1)(x)
+    # x = Dropout(drop)(x)
+    # x = conv2d(32, 5, 2, 2)(x)
+    # x = Dropout(drop)(x)
+    # x = conv2d(64, 5, 2, 3)(x)
+    # x = Dropout(drop)(x)
+    # x = conv2d(64, 3, l4_stride, 4)(x)
+    # x = Dropout(drop)(x)
+    # x = conv2d(64, 3, 1, 5)(x)
+    # x = Dropout(drop)(x)
+    # x = Flatten(name='flattened')(x)
+    # return x
 
+    # Arsitektur VGG16
+    x = img_in
+    x = conv2d(64, 3, 2, 1)(x)
+    x = conv2d(64, 3, 2, 2)(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = conv2d(128, 3, 2, 3)(x)
+    x = conv2d(128, 3, 2, 4)(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = conv2d(256, 3, 2, 5)(x)
+    x = conv2d(256, 3, 2, 6)(x)
+    x = conv2d(256, 3, 2, 7)(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = conv2d(512, 3, 2, 8)(x)
+    x = conv2d(512, 3, 2, 9)(x)
+    x = conv2d(512, 3, 2, 10)(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = conv2d(512, 3, 2, 11)(x)
+    x = conv2d(512, 3, 2, 12)(x)
+    x = conv2d(512, 3, 2, 13)(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = Flatten(name='flattened')(x)
 
 def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
     drop = 0.2
     img_in = Input(shape=input_shape, name='img_in')
     x = core_cnn_layers(img_in, drop)
-    x = Dense(100, activation='relu', name='dense_1')(x)
-    x = Dropout(drop)(x)
-    x = Dense(50, activation='relu', name='dense_2')(x)
-    x = Dropout(drop)(x)
+    # x = Dense(100, activation='relu', name='dense_1')(x)
+    # x = Dropout(drop)(x)
+    # x = Dense(50, activation='relu', name='dense_2')(x)
+    # x = Dropout(drop)(x)
+
+    # Arsitektur VGG16
+    x = Dense(4096, activation='relu', name='dense_1')(x)
+    x = Dense(4096, activation='relu', name='dense_2')(x)
 
     outputs = []
     for i in range(num_outputs):
