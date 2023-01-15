@@ -859,8 +859,8 @@ def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
     # x = Dropout(drop)(x)
 
     # Arsitektur VGG16
-    x = Dense(1024, activation='relu', name='dense_1')(x)
-    x = Dense(1024, activation='relu', name='dense_2')(x)
+    x = Dense(2048, activation='relu', name='dense_1')(x)
+    x = Dense(2048, activation='relu', name='dense_2')(x)
 
     outputs = []
     for i in range(num_outputs):
