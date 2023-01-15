@@ -175,7 +175,7 @@ class KerasPilot(ABC):
             steps_per_epoch=train_steps,
             batch_size=batch_size,
             callbacks=callbacks,
-            metrics=['accuracy'],
+            metrics=[tf.keras.metrics.Accuracy()],
             validation_data=validation_data,
             validation_steps=validation_steps,
             epochs=epochs,
