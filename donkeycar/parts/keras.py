@@ -181,6 +181,13 @@ class KerasPilot(ABC):
             verbose=verbose,
             workers=1,
             use_multiprocessing=False)
+
+        try:
+            import pickle
+            with open('/trainHistoryDict', 'wb') as file_pi:
+                pickle.dump(history.history, file_pi)
+        except:
+            print('save history error')
             
         # grafik acc, loss
         if show_plot:
@@ -205,9 +212,9 @@ class KerasPilot(ABC):
                 # summarize history for acc
                 # if 'angle_out_acc' in history.history:
                 plt.subplot(122)
-                plt.plot(history.history['angle_out_acc'])
-                plt.plot(history.history['val_angle_out_acc'])
-                plt.title('model angle accuracy')
+                plt.plot(history.history['acc'])
+                plt.plot(history.history['val_acc'])
+                plt.title('model accuracy')
                 plt.ylabel('acc')
                 plt.xlabel('epoch')
 
