@@ -339,7 +339,7 @@ class KerasLinear(KerasPilot):
         return default_n_linear(self.num_outputs, self.input_shape)
 
     def compile(self):
-        self.interpreter.compile(optimizer=self.optimizer, loss='mse')
+        self.interpreter.compile(optimizer=self.optimizer, loss='mse', metrics=['accuracy'])
 
     def interpreter_to_output(self, interpreter_out):
         steering = interpreter_out[0]
