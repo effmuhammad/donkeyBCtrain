@@ -797,6 +797,7 @@ def conv2d(filters, kernel, strides, layer_num, activation='relu'):
     return Convolution2D(filters=filters,
                          kernel_size=(kernel, kernel),
                          strides=(strides, strides),
+                         padding="same",
                          activation=activation,
                          name='conv2d_' + str(layer_num))
 
