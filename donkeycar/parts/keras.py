@@ -838,22 +838,35 @@ def core_cnn_layers(img_in, drop, l4_stride=1):
     # Arsitektur VGG16
     x = img_in
     x = conv2d(64, 3, 1, 1)(x)
+    x = Dropout(drop)(x)
     x = conv2d(64, 3, 1, 2)(x)
+    x = Dropout(drop)(x)
     x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
     x = conv2d(128, 3, 1, 3)(x)
+    x = Dropout(drop)(x)
     x = conv2d(128, 3, 1, 4)(x)
+    x = Dropout(drop)(x)
     x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
     x = conv2d(256, 3, 1, 5)(x)
+    x = Dropout(drop)(x)
     x = conv2d(256, 3, 1, 6)(x)
+    x = Dropout(drop)(x)
     x = conv2d(256, 3, 1, 7)(x)
+    x = Dropout(drop)(x)
     x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
     x = conv2d(512, 3, 1, 8)(x)
+    x = Dropout(drop)(x)
     x = conv2d(512, 3, 1, 9)(x)
+    x = Dropout(drop)(x)
     x = conv2d(512, 3, 1, 10)(x)
+    x = Dropout(drop)(x)
     x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
     x = conv2d(512, 3, 1, 11)(x)
+    x = Dropout(drop)(x)
     x = conv2d(512, 3, 1, 12)(x)
+    x = Dropout(drop)(x)
     x = conv2d(512, 3, 1, 13)(x)
+    x = Dropout(drop)(x)
     x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
     x = Flatten(name='flattened')(x)
     return x
@@ -869,7 +882,9 @@ def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
 
     # Arsitektur VGG16
     x = Dense(4096, activation='relu', name='dense_1')(x)
+    x = Dropout(drop)(x)
     x = Dense(4096, activation='relu', name='dense_2')(x)
+    x = Dropout(drop)(x)
 
     outputs = []
     for i in range(num_outputs):
