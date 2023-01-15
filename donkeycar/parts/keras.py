@@ -853,14 +853,14 @@ def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
     drop = 0.2
     img_in = Input(shape=input_shape, name='img_in')
     x = core_cnn_layers(img_in, drop)
-    # x = Dense(100, activation='relu', name='dense_1')(x)
-    # x = Dropout(drop)(x)
-    # x = Dense(50, activation='relu', name='dense_2')(x)
-    # x = Dropout(drop)(x)
+    x = Dense(100, activation='relu', name='dense_1')(x)
+    x = Dropout(drop)(x)
+    x = Dense(50, activation='relu', name='dense_2')(x)
+    x = Dropout(drop)(x)
 
     # Arsitektur VGG16
-    x = Dense(2048, activation='relu', name='dense_1')(x)
-    x = Dense(2048, activation='relu', name='dense_2')(x)
+    # x = Dense(2048, activation='relu', name='dense_1')(x)
+    # x = Dense(2048, activation='relu', name='dense_2')(x)
 
     outputs = []
     for i in range(num_outputs):
