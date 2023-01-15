@@ -184,7 +184,7 @@ class KerasPilot(ABC):
 
         try:
             import pickle
-            with open('/trainHistoryDict', 'wb') as file_pi:
+            with open('/content/trainHistoryDict.pkl', 'wb') as file_pi:
                 pickle.dump(history.history, file_pi)
         except:
             print('save history error')
@@ -198,7 +198,7 @@ class KerasPilot(ABC):
                 plt.figure(1)
                 # Only do accuracy if we have that data
                 # (e.g. categorical outputs)
-                if 'angle_out_acc' in history.history:
+                if 'accuracy' in history.history:
                     plt.subplot(121)
 
                 # summarize history for loss
@@ -212,11 +212,12 @@ class KerasPilot(ABC):
                 # summarize history for acc
                 # if 'angle_out_acc' in history.history:
                 plt.subplot(122)
-                plt.plot(history.history['acc'])
-                plt.plot(history.history['val_acc'])
+                plt.plot(history.history['accuracy'])
+                plt.plot(history.history['val_accuracy'])
                 plt.title('model accuracy')
-                plt.ylabel('acc')
+                plt.ylabel('accuracy')
                 plt.xlabel('epoch')
+                plt.legend(['train', 'validate'], loc='upper right')
 
                 plt.savefig(Path(model_path).with_suffix('.png'))
                 # plt.show()
