@@ -151,8 +151,8 @@ class KerasPilot(ABC):
               validation_steps: int,
               epochs: int,
               verbose: int = 1,
-              min_delta: float = .0005,
-              patience: int = 5,
+              min_delta: float = .000005,
+              patience: int = 10,
               show_plot: bool = False) -> tf.keras.callbacks.History:
         """
         trains the model
