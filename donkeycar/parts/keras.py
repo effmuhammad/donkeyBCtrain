@@ -970,14 +970,14 @@ def core_cnn_layers(img_in, drop, l4_stride=1):
     x = _inverted_residual_block(x, 32, (3, 3), t=6, strides=2, n=3)
     x = _inverted_residual_block(x, 64, (3, 3), t=6, strides=2, n=4)
     x = _inverted_residual_block(x, 96, (3, 3), t=6, strides=1, n=3)
-    x = _inverted_residual_block(x, 160, (3, 3), t=6, strides=2, n=3)
-    x = _inverted_residual_block(x, 320, (3, 3), t=6, strides=1, n=1)
+    # x = _inverted_residual_block(x, 160, (3, 3), t=6, strides=2, n=3)
+    # x = _inverted_residual_block(x, 320, (3, 3), t=6, strides=1, n=1)
 
-    x = _conv_block(x, 1280, (1, 1), strides=(1, 1))
+    x = _conv_block(x, 320, (1, 1), strides=(1, 1))
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
     x = tf.keras.layers.Reshape((1, 1, 1280))(x)
     x = tf.keras.layers.Dropout(0.3, name='Dropout')(x)
-    x = tf.keras.layers.Conv2D(k, (1, 1), padding='same')(x)
+    x = tf.keras.layers.Conv2D(200, (1, 1), padding='same')(x)
     x = tf.keras.layers.Activation('softmax', name='final_activation')(x)
     return x
 
