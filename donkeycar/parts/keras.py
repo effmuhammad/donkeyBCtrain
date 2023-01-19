@@ -1004,7 +1004,7 @@ def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
             Dense(1, activation='linear', name='n_outputs' + str(i))(x))
 
     model = Model(inputs=[img_in], outputs=outputs, name='linear')
-    tf.keras.utils.plot_model(model, to_file='model_arch.png', show_shapes=True)
+    tf.keras.utils.plot_model(model, to_file='/content/model_arch.png', show_shapes=True)
     return model
 
 
