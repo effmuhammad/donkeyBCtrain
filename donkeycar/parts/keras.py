@@ -198,8 +198,8 @@ class KerasPilot(ABC):
                 plt.figure(1)
                 # Only do accuracy if we have that data
                 # (e.g. categorical outputs)
-                if 'accuracy' in history.history:
-                    plt.subplot(121)
+                # if 'accuracy' in history.history:
+                #     plt.subplot(121)
 
                 # summarize history for loss
                 plt.plot(history.history['loss'])
@@ -210,17 +210,17 @@ class KerasPilot(ABC):
                 plt.legend(['train', 'validate'], loc='upper right')
 
                 # summarize history for acc
-                # if 'angle_out_acc' in history.history:
-                plt.subplot(122)
-                plt.plot(history.history['accuracy'])
-                plt.plot(history.history['val_accuracy'])
-                plt.title('model accuracy')
-                plt.ylabel('accuracy')
-                plt.xlabel('epoch')
-                plt.legend(['train', 'validate'], loc='upper right')
+                if 'angle_out_acc' in history.history:
+                    plt.subplot(122)
+                    plt.plot(history.history['accuracy'])
+                    plt.plot(history.history['val_accuracy'])
+                    plt.title('model accuracy')
+                    plt.ylabel('accuracy')
+                    plt.xlabel('epoch')
+                    plt.legend(['train', 'validate'], loc='upper right')
 
-                plt.savefig(Path(model_path).with_suffix('.png'))
-                # plt.show()
+                    plt.savefig(Path(model_path).with_suffix('.png'))
+                    # plt.show()
             
 
             except Exception as ex:
@@ -973,11 +973,11 @@ def core_cnn_layers(img_in, drop, l4_stride=1):
     # x = _inverted_residual_block(x, 160, (3, 3), t=6, strides=2, n=3)
     # x = _inverted_residual_block(x, 320, (3, 3), t=6, strides=1, n=1)
 
-    x = _conv_block(x, 320, (1, 1), strides=(1, 1))
+    x = _conv_block(x, 124, (1, 1), strides=(1, 1))
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
-    x = tf.keras.layers.Reshape((1, 1, 320))(x)
+    # x = tf.keras.layers.Reshape((1, 1, 320))(x)
     x = tf.keras.layers.Dropout(0.3, name='Dropout')(x)
-    x = tf.keras.layers.Conv2D(200, (1, 1), padding='same')(x)
+    x = tf.keras.layers.Conv2D(64, (3, 3), (1 ,1), padding='same')(x)
     x = Dropout(drop)(x)
     x = Flatten(name='flattened')(x)
     # x = tf.keras.layers.Activation('relu', name='final_activation')(x)
