@@ -978,6 +978,8 @@ def core_cnn_layers(img_in, drop, l4_stride=1):
     x = tf.keras.layers.Reshape((1, 1, 320))(x)
     x = tf.keras.layers.Dropout(0.3, name='Dropout')(x)
     x = tf.keras.layers.Conv2D(200, (1, 1), padding='same')(x)
+    x = Dropout(drop)(x)
+    x = Flatten(name='flattened')(x)
     # x = tf.keras.layers.Activation('relu', name='final_activation')(x)
     return x
 
