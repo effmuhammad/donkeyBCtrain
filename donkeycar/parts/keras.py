@@ -151,8 +151,8 @@ class KerasPilot(ABC):
               validation_steps: int,
               epochs: int,
               verbose: int = 1,
-              min_delta: float = .000005,
-              patience: int = 10,
+              min_delta: float = .0000005,
+              patience: int = 15,
               show_plot: bool = False) -> tf.keras.callbacks.History:
         """
         trains the model
@@ -184,7 +184,7 @@ class KerasPilot(ABC):
 
         try:
             import pickle
-            with open('/content/trainHistoryDict.pkl', 'wb') as file_pi:
+            with open('/content/trainHistory.pkl', 'wb') as file_pi:
                 pickle.dump(history.history, file_pi)
         except:
             print('save history error')
@@ -902,87 +902,20 @@ def core_cnn_layers(img_in, drop, l4_stride=1):
     :param l4_stride:       4-th layer stride, default 1
     :return:                stack of CNN layers
     """
-    # # default:
-    # x = img_in
-    # x = conv2d(24, 5, 2, 1)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(32, 5, 2, 2)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(64, 5, 2, 3)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(64, 3, l4_stride, 4)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(64, 3, 1, 5)(x)
-    # x = Dropout(drop)(x)
-    # x = Flatten(name='flattened')(x)
-    # return x
-
-    # # Arsitektur VGG16
-    # x = img_in
-    # x = conv2d(64, 3, 1, 1)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(64, 3, 1, 2)(x)
-    # x = Dropout(drop)(x)
-    # x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
-    # x = conv2d(128, 3, 1, 3)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(128, 3, 1, 4)(x)
-    # x = Dropout(drop)(x)
-    # x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
-    # x = conv2d(256, 3, 1, 5)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(256, 3, 1, 6)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(256, 3, 1, 7)(x)
-    # x = Dropout(drop)(x)
-    # x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
-    # x = conv2d(512, 3, 1, 8)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(512, 3, 1, 9)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(512, 3, 1, 10)(x)
-    # x = Dropout(drop)(x)
-    # x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
-    # x = conv2d(512, 3, 1, 11)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(512, 3, 1, 12)(x)
-    # x = Dropout(drop)(x)
-    # x = conv2d(512, 3, 1, 13)(x)
-    # x = Dropout(drop)(x)
-    # x = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(x)
-    # x = Flatten(name='flattened')(x)
-    # return x
-
-    """MobileNetv2
-    This function defines a MobileNetv2 architecture.
-    # Arguments
-        input_shape: An integer or tuple/list of 3 integers, shape
-            of input tensor.
-        k: Integer, number of classes.
-        plot_model: Boolean, whether to plot model architecture or not
-    # Returns
-        MobileNetv2 model.
-    """
-    k = 2
-    x = _conv_block(img_in, 32, (3, 3), strides=(2, 2))
-    x = _inverted_residual_block(x, 16, (3, 3), t=1, strides=1, n=1)
-    x = _inverted_residual_block(x, 24, (3, 3), t=6, strides=2, n=2)
-    x = _inverted_residual_block(x, 32, (3, 3), t=6, strides=2, n=3)
-    x = _inverted_residual_block(x, 64, (3, 3), t=6, strides=2, n=4)
-    x = _inverted_residual_block(x, 96, (3, 3), t=6, strides=1, n=3)
-    # x = _inverted_residual_block(x, 160, (3, 3), t=6, strides=2, n=3)
-    # x = _inverted_residual_block(x, 320, (3, 3), t=6, strides=1, n=1)
-
-    x = _conv_block(x, 64, (3, 3), strides=(1, 1))
-    x = tf.keras.layers.GlobalAveragePooling2D()(x)
-    # x = tf.keras.layers.Reshape((1, 1, 320))(x)
-    x = tf.keras.layers.Dropout(0.3, name='Dropout')(x)
-    x = tf.keras.layers.Conv2D(64, (3, 3), (1 ,1), padding='same')(x)
+    # default:
+    x = img_in
+    x = conv2d(24, 5, 2, 1)(x)
+    x = Dropout(drop)(x)
+    x = conv2d(32, 5, 2, 2)(x)
+    x = Dropout(drop)(x)
+    x = conv2d(64, 5, 2, 3)(x)
+    x = Dropout(drop)(x)
+    x = conv2d(64, 3, l4_stride, 4)(x)
+    x = Dropout(drop)(x)
+    x = conv2d(64, 3, 1, 5)(x)
     x = Dropout(drop)(x)
     x = Flatten(name='flattened')(x)
-    # x = tf.keras.layers.Activation('relu', name='final_activation')(x)
     return x
-
 
 def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
     drop = 0.2
@@ -993,12 +926,6 @@ def default_n_linear(num_outputs, input_shape=(120, 160, 3)):
     x = Dropout(drop)(x)
     x = Dense(50, activation='relu', name='dense_2')(x)
     x = Dropout(drop)(x)
-
-    # # Arsitektur VGG16
-    # x = Dense(4096, activation='relu', name='dense_1')(x)
-    # x = Dropout(drop)(x)
-    # x = Dense(4096, activation='relu', name='dense_2')(x)
-    # x = Dropout(drop)(x)
 
     outputs = []
     for i in range(num_outputs):
